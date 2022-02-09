@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="@id/correct"/>
 
     <Button
-        android:id="@+id/next_button"
+        android:id="@+id/land_next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,7 @@
         android:drawableEnd="@drawable/arrow_right"/>
 
     <Button
-        android:id="@+id/prev_button"
+        android:id="@+id/land_prev_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

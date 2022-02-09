@@ -1,10 +1,10 @@
 package com.lutalic.geoquiz
 
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-//import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 
@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         trueButton = findViewById(R.id.correct)
         falseButton = findViewById(R.id.incorrect)
-        nextButton = findViewById(R.id.next_button)
-        prevButton = findViewById(R.id.prev_button)
+        nextButton = findViewById(getScreenOrientation(SwapButton.FORWARD))
+        prevButton = findViewById(getScreenOrientation(SwapButton.BACK))
         questionView = findViewById(R.id.question)
 
         // в setOnClickListener необходимо передать лямбду с обработкой ивента
@@ -54,43 +54,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkAnswer(ans: Boolean) {
-        val answer: Int
-
-        if (ans == questions.pairs[currentIndex].second) {
-            answer = if (questions.pairs.size == 1) {
-                R.string.win_message
-            } else {
-                R.string.correct_toast
-            }
-
-            questions.pairs.removeAt(currentIndex)
-            if (questions.pairs.size != 0) {
-                when (currentIndex) {
-                    questions.pairs.size - 1 -> questionView.setText(questions.pairs[currentIndex - 1].first)
-                    else -> questionView.setText(questions.pairs[currentIndex + 1].first)
-                }
-            }
-        } else {
-            answer = R.string.incorrect_toast
-        }
-
+    private fun message(msg: Int) {
         Toast.makeText(
             this,
-            answer,
+            msg,
             Toast.LENGTH_SHORT).show()
+    }
+
+    private fun checkAnswer(ans: Boolean) {
+        if (ans == questions.pairs[currentIndex].second) {
+            if (questions.pairs.size == 1) {
+                message(R.string.win_message)
+                return
+            }
+
+            Thread.sleep(800)
+
+            message(R.string.correct_toast)
+            questions.pairs.removeAt(currentIndex)
+            when (currentIndex) {
+                questions.pairs.size -> questionView.setText(questions.pairs[--currentIndex].first)
+                else -> questionView.setText(questions.pairs[currentIndex].first)
+            }
+        } else {
+            message(R.string.incorrect_toast)
+        }
     }
 
     private fun swapQuestion(side: Boolean) {
         when {
             side && currentIndex < questions.pairs.size - 1 -> questionView.setText(questions.pairs[++currentIndex].first)
             !side && currentIndex > 0 -> questionView.setText(questions.pairs[--currentIndex].first)
-            else -> {
-                val mes = if (side) R.string.last_question else R.string.first_question
-                Toast.makeText(
-                this,
-                mes,
-                Toast.LENGTH_SHORT).show()
+            else -> if (side) message(R.string.last_question) else message(R.string.first_question)
+        }
+    }
+
+    private fun getScreenOrientation(type: SwapButton): Int {
+        return if (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+           when (type) {
+               SwapButton.FORWARD -> R.id.next_button
+               else -> R.id.prev_button
+           }
+        } else {
+            when (type) {
+                SwapButton.FORWARD -> R.id.land_next_button
+                else -> R.id.land_prev_button
             }
         }
     }
