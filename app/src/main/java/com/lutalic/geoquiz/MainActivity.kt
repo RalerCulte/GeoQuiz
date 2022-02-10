@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,16 +16,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: View
     private lateinit var prevButton: View
     private lateinit var questionView: TextView
-    private var currentIndex = 0
 
-    private val questions = Question(arrayListOf(
-        R.string.question_australia to true,
-        R.string.question_oceans to true,
-        R.string.question_mideast to false,
-        R.string.question_africa to false,
-        R.string.question_americas to true,
-        R.string.question_asia to true))
-
+    private val viewModel: QuizViewModel by lazy {
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         nextButton = findViewById(getScreenOrientation(SwapButton.FORWARD))
         prevButton = findViewById(getScreenOrientation(SwapButton.BACK))
         questionView = findViewById(R.id.question)
+
+        questionView.setText(viewModel.currentQuestion)
 
         // в setOnClickListener необходимо передать лямбду с обработкой ивента
         trueButton.setOnClickListener {
@@ -62,19 +59,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAnswer(ans: Boolean) {
-        if (ans == questions.pairs[currentIndex].second) {
-            if (questions.pairs.size == 1) {
+        if (ans == viewModel.currentAnswer) {
+            if (viewModel.currentSize == 1) {
                 message(R.string.win_message)
                 return
             }
 
-            Thread.sleep(800)
-
             message(R.string.correct_toast)
-            questions.pairs.removeAt(currentIndex)
-            when (currentIndex) {
-                questions.pairs.size -> questionView.setText(questions.pairs[--currentIndex].first)
-                else -> questionView.setText(questions.pairs[currentIndex].first)
+            viewModel.removeElement()
+            when (viewModel.currentIndex) {
+                viewModel.currentSize -> {
+                    viewModel.currentIndex--
+                    questionView.setText(viewModel.currentQuestion)
+                }
+                else -> questionView.setText(viewModel.currentQuestion)
             }
         } else {
             message(R.string.incorrect_toast)
@@ -83,8 +81,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun swapQuestion(side: Boolean) {
         when {
-            side && currentIndex < questions.pairs.size - 1 -> questionView.setText(questions.pairs[++currentIndex].first)
-            !side && currentIndex > 0 -> questionView.setText(questions.pairs[--currentIndex].first)
+            side && viewModel.currentIndex < viewModel.currentSize - 1 -> {
+                    viewModel.currentIndex++
+                    questionView.setText(viewModel.currentQuestion)
+            }
+            !side && viewModel.currentIndex > 0 ->  {
+                    viewModel.currentIndex--
+                    questionView.setText(viewModel.currentQuestion)
+            }
             else -> if (side) message(R.string.last_question) else message(R.string.first_question)
         }
     }
