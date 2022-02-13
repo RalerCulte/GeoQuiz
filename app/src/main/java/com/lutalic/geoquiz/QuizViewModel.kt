@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 
 class QuizViewModel : ViewModel() {
     var currentIndex = 0
+    var record = 0
+    var endGame = false
 
-    private val questions = Question(arrayListOf(
+    private var questions = Question(arrayListOf(
         R.string.question_australia to true,
         R.string.question_oceans to true,
         R.string.question_mideast to false,
@@ -24,5 +26,11 @@ class QuizViewModel : ViewModel() {
 
     fun removeElement() {
         questions.pairs.removeAt(currentIndex)
+    }
+
+    fun checkEnd() {
+        if (endGame) {
+            questions = Question(arrayListOf(R.string.end_que to true))
+        }
     }
 }

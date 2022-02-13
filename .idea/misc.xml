@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/glebk/Desktop/Mobile/Android/app/src/main/res/layout-land/activity_main.xml" value="0.14666666666666667" />
-        <entry key="..\:/Users/glebk/Desktop/Mobile/Android/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/glebk/Desktop/Mobile/Android/app/src/main/res/layout/activity_cheat.xml" value="0.14407866609662248" />
+        <entry key="..\:/Users/glebk/Desktop/Mobile/Android/app/src/main/res/layout/activity_final_screen.xml" value="0.14407866609662248" />
+        <entry key="..\:/Users/glebk/Desktop/Mobile/Android/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
       </map>
     </option>
   </component>

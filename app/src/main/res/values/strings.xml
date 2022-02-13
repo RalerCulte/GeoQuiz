@@ -20,4 +20,10 @@ freshwater lake.</string>
     <string name="next">Next</string>
     <string name="previous">previous</string>
     <string name="win_message">You win!</string>
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+    <string name="good_game">Good game!</string>
+    <string name="end_que">Questions end!</string>
 </resources>
